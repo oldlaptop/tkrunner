@@ -1,0 +1,23 @@
+#! /usr/bin/env wish
+
+package require Tk 8.6
+
+set cmd {}
+set msg {}
+
+interp create runner
+interp eval runner {
+	package require trun
+}
+
+ttk::frame .f
+ttk::entry .f.cmdline -textvariable ::cmd
+ttk::button .f.run -text Run -width 0 -command {
+	set ::msg [interp eval runner "namespace eval trun $cmd"]
+}
+ttk::label .f.msg -textvariable ::msg
+
+grid .f.cmdline .f.run -sticky ew
+grid .f.msg     -      -sticky ew
+
+pack .f -expand y -fill both
