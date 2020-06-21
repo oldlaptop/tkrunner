@@ -74,6 +74,7 @@ proc show {} {
 		focus .tkrunner.f.cmdline
 
 		bind .tkrunner <KeyPress-Return> { .tkrunner.f.run invoke }
+		bind .tkrunner <KeyPress-Escape> { hide }
 	}
 }
 
