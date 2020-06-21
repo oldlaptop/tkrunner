@@ -6,18 +6,63 @@ set cmd {}
 set msg {}
 
 interp create runner
+interp alias runner hide {} hide
 interp eval runner {
 	package require trun
+
+	set hide_delay 2000
+
+	trace add execution trun::unknown leave {apply { {cmd code result op} {
+		if {!$code} {
+			after 2000 hide
+		}
+	}}}
 }
 
-ttk::frame .f
-ttk::entry .f.cmdline -textvariable ::cmd
-ttk::button .f.run -text Run -width 0 -command {
-	set ::msg [interp eval runner "namespace eval trun $cmd"]
+# apply padding to a list of grid-ed widgets
+proc pad_grid_widgets {widgets {amt 1}} {
+	set amt [expr {ceil($amt * [tk scaling])}]
+	foreach widget $widgets {
+		grid configure $widget -padx $amt -pady $amt
+	}
 }
-ttk::label .f.msg -textvariable ::msg
 
-grid .f.cmdline .f.run -sticky ew
-grid .f.msg     -      -sticky ew
+# define and show the "Run Command" toplevel
+proc show {} {
+	set ::msg {}
+	set ::cmd {}
 
-pack .f -expand y -fill both
+	toplevel .tkrunner
+	wm title .tkrunner "Run Command"
+
+	ttk::frame .tkrunner.f
+	ttk::entry .tkrunner.f.cmdline -textvariable ::cmd
+	ttk::button .tkrunner.f.run -text Run -width 0 -command {
+		set ::msg [interp eval runner "namespace eval trun $cmd"]
+	}
+	ttk::label .tkrunner.f.msg -textvariable ::msg
+
+	grid .tkrunner.f.cmdline .tkrunner.f.run -sticky ew
+	grid .tkrunner.f.msg     -      -sticky ew
+
+	pad_grid_widgets [winfo children .tkrunner.f]
+
+	pack .tkrunner.f -expand y -fill both
+
+	wm attributes .tkrunner -topmost yes
+
+	bind .tkrunner <KeyPress-Return> { .tkrunner.f.run invoke }
+}
+
+# hide (actually destroy, for now) the "Run Command" toplevel
+proc hide {} { destroy .tkrunner }
+
+if {[tk appname tkrunner] ne "tkrunner"} {
+	# Tell the already-running tkrunner instance to show its "Run Command"
+	# toplevel and quit.
+	send tkrunner show
+	exit
+} else {
+	wm withdraw .
+	show
+}
