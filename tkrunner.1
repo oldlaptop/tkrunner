@@ -1,0 +1,154 @@
+.Dd $Mdocdate$
+.Dt TKRUNNER 1
+.Os
+.Sh NAME
+.Nm tkrunner
+.Nd run command dialog for X in Tcl/Tk
+.Sh SYNOPSIS
+.Nm tkrunner
+.Op -quiet
+.Sh DESCRIPTION
+.Nm
+displays a Run Command dialog box that accepts an extended
+.Xr Tcl n
+syntax.
+It is intended to be invoked from an X startup file such as
+.Pa ~/.xsession
+or
+.Pa ~/.xinitrc
+in the background:
+.Bd -literal -offset -indent
+tkrunner -quiet &
+.Ed
+.Pp
+and then bound to a keyboard shortcut in your window manager.
+When
+.Nm
+is first invoked, it displays its window (unless told otherwise with -quiet),
+but stays resident after it is destroyed.
+Afterwards, when invoked again,
+.Nm
+will instruct the running instance to display its window again, using Tk's
+.Xr send n
+facility.
+.Ss USAGE
+The Run Command dialog accepts the full
+.Xr Tcl n
+syntax, with several extensions.
+Specifically, the environment it provides
+differs from a clean, default
+.Xr tclsh 1
+session as follows:
+.Bl -bullet
+.It
+All commands are evaluated in the namespace
+.Sy ::trun .
+.It
+The default
+.Sy namespace path
+contains the
+.Xr mathop n
+and
+.Xr mathfunc n
+namespaces.
+.It
+The
+.Sy ::trun
+namespace itself provides several commands:
+.Bl -tag -width 8
+.It runcmd
+Accepts the same pipeline syntax as
+.Xr exec n
+while automatically redirecting pipeline output to a temporary file, and
+backgrounding the pipeline.
+.It openurl
+Expects a single
+.Em url
+argument, and passes it to
+.Xr xdg-open 1
+via runcmd.
+.El
+.It
+The
+.Sy ::trun
+namespace contains a child namespace called
+.Sy shortcuts
+that supplies implementations of the shortcuts described under
+.Sx SHORTCUTS
+as commands.
+.It
+The
+.Sy namespace unknown
+facility is used to implement syntactic sugar as follows:
+.Bl -dash
+.It
+Command lines that appear to be valid URLs are passed to
+.Sy openurl .
+.It
+Command lines that begin with a shortcut name and a colon, for example,
+.So
+wp:Main Page
+.Sc
+are evaluated in the
+.Sy ::trun::shortcuts
+namespace after replacing the colon with a space.
+.It
+All other command lines are treated as
+.Xr exec n
+pipelines and passed to
+.Sy runcmd .
+.El
+Any command that causes the unknown handler to be invoked causes the dialog to
+be hidden after a few seconds.
+.El
+.Pp
+Commands entered at the dialog box are evaluated and their results displayed
+at the bottom of the dialog.
+Any errors are also caught and indicated here.
+This environment is a child
+.Xr interp n
+and therefore cannot directly introspect or mangle the main application's state,
+but it does have full control over its own state, and the full Tcl language at
+its disposal.
+.Ss SHORTCUTS
+No shortcuts are implemented yet.
+They are envisioned to function like the Web Shortcuts supported by
+.Sy Konqueror
+and
+.Sy KRunner .
+.Sh EXAMPLES
+Run a program in the default search path:
+.Bd -literal -offset -indent
+xterm
+.Ed
+.Pp
+Open a directory full of text files in
+.Xr kate 1
+using the
+.Xr glob n
+command (note that Tcl syntax applies, not the Bourne shell as in most other
+run-command dialog utilities):
+.Bd -literal -offset -indent
+kate [glob -types f /home/user/src/tkrunner/*]
+.Ed
+.Pp
+Evaluate arithmetic expressions in infix notation (with the
+.Xr expr n
+command):
+.Bd -literal -offset -indent
+expr {sin(3 * 3.14159 / 2)}
+.Ed
+.Pp
+Or in prefix notation (with the commands found in the
+.Xr mathop n
+and
+.Xr mathfunc n
+namespaces):
+.Bd -literal -offset -indent
+sin [/ [* 3 3.14159] 2]
+.Ed
+.Sh BUGS
+Much functionality remains to be implemented.
+.Pp
+Up-to-date information on any issues may be found on the Gitub issue tracker:
+https://github.com/oldlaptop/tkrunner/issues

@@ -1,0 +1,2 @@
+#! /bin/sh
+mandoc -T markdown -W base tkrunner.1 > README.md
