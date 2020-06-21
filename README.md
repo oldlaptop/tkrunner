@@ -26,7 +26,8 @@ in the background:
 and then bound to a keyboard shortcut in your window manager.
 When
 **tkrunner**
-is first invoked, it displays its window (unless told otherwise with -quiet),
+is first invoked, it displays its window
+(unless told otherwise with -quiet)
 but stays resident after it is destroyed.
 Afterwards, when invoked again,
 **tkrunner**
@@ -43,6 +44,11 @@ Specifically, the environment it provides
 differs from a clean, default
 tclsh(1)
 session as follows:
+
+*	The
+	http(n)
+	package is loaded.
+	(It is used internally for URL processing.)
 
 *	All commands are evaluated in the namespace
 	**::trun**.
@@ -89,11 +95,10 @@ session as follows:
 	-	Command lines that appear to be valid URLs are passed to
 		**openurl**.
 
-	-	Command lines that begin with a shortcut name and a colon, for example,
-		'wp:Main Page'
-		are evaluated in the
+	-	Command lines that are valid shortcut specifications are evaluated in the
 		**::trun::shortcuts**
-		namespace after replacing the colon with a space.
+		namespace, after replacing the colon with a space and concatenating all but the
+		first element in the Tcl list thus produced.
 
 	-	All other command lines are treated as
 		exec(n)
@@ -114,11 +119,57 @@ its disposal.
 
 ## SHORTCUTS
 
-No shortcuts are implemented yet.
-They are envisioned to function like the Web Shortcuts supported by
+Shortcuts are inspired by the Web Shortcuts supported by
 **Konqueror**
 and
 **KRunner**.
+Shortcut specifications consist of a shortcut name and a shortcut query,
+separated by a single colon, for example:
+
+	wp:Main Page
+
+Running a shortcut generally results in a URL being opened in the user's default
+application with
+xdg-open(1),
+but other behaviors are possible.
+The currently implemented shortcuts are:
+
+dd
+
+> DuckDuckGo search for the shortcut query.
+
+gg
+
+> Google search for the shortcut query.
+
+man
+
+> Local manpage search.
+> The shortcut query is interpreted as a manual page
+> specifier in the typical name(section) format; if the section is omitted,
+> man(1)
+> will apply its default section matching rules, and the first matching page will
+> be selected.
+> The manual page will be formatted as HTML using
+> mandoc(1)
+> and opened with
+> xdg-open(1).
+> mandoc(1)
+> must be installed, and the system's implementation of
+> man(1)
+> must support the
+> **--w**
+> option to print the paths to manual page source files.
+
+op
+
+> openports.pl pkgname search for the shortcut query.
+
+wp
+
+> Wikipedia search for the shortcut query.
+
+All shortcuts are implemented as commands in the ::trun::shortcuts namespace
 
 # EXAMPLES
 
@@ -130,8 +181,10 @@ Open a directory full of text files in
 kate(1)
 using the
 glob(n)
-command (note that Tcl syntax applies, not the Bourne shell as in most other
-run-command dialog utilities):
+command
+(note that Tcl syntax applies, not the Bourne shell as in most other
+run-command dialog utilities)
+:
 
 	kate [glob -types f /home/user/src/tkrunner/*]
 
@@ -141,11 +194,13 @@ command):
 
 	expr {sin(3 * 3.14159 / 2)}
 
-Or in prefix notation (with the commands found in the
+Or in prefix notation
+(with the commands found in the
 mathop(n)
 and
 mathfunc(n)
-namespaces):
+namespaces)
+:
 
 	sin [/ [* 3 3.14159] 2]
 
