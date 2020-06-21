@@ -6,7 +6,6 @@ set cmd {}
 set msg {}
 
 interp create runner
-interp alias runner hide {} hide
 interp eval runner {
 	package require trun
 
@@ -18,6 +17,7 @@ interp eval runner {
 		}
 	}}}
 }
+interp alias runner hide {} hide
 
 # apply padding to a list of grid-ed widgets
 proc pad_grid_widgets {widgets {amt 1}} {
@@ -27,32 +27,40 @@ proc pad_grid_widgets {widgets {amt 1}} {
 	}
 }
 
-# define and show the "Run Command" toplevel
+# define (if necessary) and show the "Run Command" toplevel
 proc show {} {
-	set ::msg {}
-	set ::cmd {}
+	if {[winfo exists .tkrunner]} {
+		focus -force .tkrunner
+	} else {
+		set ::msg {}
+		set ::cmd {}
 
-	toplevel .tkrunner
-	wm title .tkrunner "Run Command"
+		toplevel .tkrunner
+		wm title .tkrunner "Run Command"
 
-	ttk::frame .tkrunner.f
-	ttk::entry .tkrunner.f.cmdline -textvariable ::cmd
-	ttk::button .tkrunner.f.run -text Run -width 0 -command {
-		set ::msg [interp eval runner "namespace eval trun $cmd"]
+		ttk::frame .tkrunner.f
+		ttk::entry .tkrunner.f.cmdline -textvariable ::cmd
+		ttk::button .tkrunner.f.run -text Run -width 0 -command {
+			set ::msg [try {
+				interp eval runner "namespace eval trun $cmd"
+			} on error {err opts} {
+				expr {"error: $err"}
+			}]
+		}
+		ttk::label .tkrunner.f.msg -textvariable ::msg
+
+		grid .tkrunner.f.cmdline .tkrunner.f.run -sticky ew
+		grid .tkrunner.f.msg     -      -sticky ew
+
+		pad_grid_widgets [winfo children .tkrunner.f]
+
+		pack .tkrunner.f -expand y -fill both
+
+		wm attributes .tkrunner -topmost yes
+		focus .tkrunner.f.cmdline
+
+		bind .tkrunner <KeyPress-Return> { .tkrunner.f.run invoke }
 	}
-	ttk::label .tkrunner.f.msg -textvariable ::msg
-
-	grid .tkrunner.f.cmdline .tkrunner.f.run -sticky ew
-	grid .tkrunner.f.msg     -      -sticky ew
-
-	pad_grid_widgets [winfo children .tkrunner.f]
-
-	pack .tkrunner.f -expand y -fill both
-
-	wm attributes .tkrunner -topmost yes
-	focus .tkrunner.f.cmdline
-
-	bind .tkrunner <KeyPress-Return> { .tkrunner.f.run invoke }
 }
 
 # hide (actually destroy, for now) the "Run Command" toplevel
