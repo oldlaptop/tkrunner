@@ -24,11 +24,8 @@ proc unknown {args} {
 		# Try it as a shortcut
 		set spec [string map {: { }} $args]
 		set script [list [lindex $spec 0] [lrange spec 1 end]]
-		try {
-			return [namespace eval [namespace current]::shortcuts $script]
-		} on error {err info} {
-			return "error: $err"
-		}
+
+		return [namespace eval [namespace current]::shortcuts $script]
 	# otherwise treat it as an exec(n) pipeline
 	} else {
 		return [runcmd {*}$args]
