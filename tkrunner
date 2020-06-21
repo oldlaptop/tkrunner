@@ -50,6 +50,7 @@ proc show {} {
 	pack .tkrunner.f -expand y -fill both
 
 	wm attributes .tkrunner -topmost yes
+	focus .tkrunner.f.cmdline
 
 	bind .tkrunner <KeyPress-Return> { .tkrunner.f.run invoke }
 }
