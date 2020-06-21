@@ -49,9 +49,35 @@ proc unknown {args} {
 namespace eval shortcuts {
 	namespace path [concat [namespace path] [namespace parent]]
 
+	variable manexp {([[:alnum:]\-_:\.]+)(\(([[:digit:]]?[[:lower:]]?)\))?}
+
+	# Amazon search
+	proc amazon {query} {
+		openurl https://amazon.com/s?[http::formatQuery k $query]
+	}
+
+	# Debian package search
+	proc deb {query} {
+		openurl https://packages.debian.org/[http::quoteString $query]
+	}
+
 	# DuckDuckGo search
 	proc dd {query} {
 		openurl https://duckduckgo.com/?[http::formatQuery q $query]
+	}
+
+	# Debian manpage search
+	proc dman {query} {
+		variable manexp
+
+		# manpages.debian.org is tolerant of the stray .
+		regexp $manexp $query -> name -> section
+		openurl https://manpages.debian.org/$name.$section
+	}
+
+	# eBay search
+	proc ebay {query} {
+		openurl https://www.ebay.com/sch/i.html?[http::formatQuery _nkw $query]
 	}
 
 	# Google search
@@ -62,11 +88,14 @@ namespace eval shortcuts {
 	# Local manpage search; requires mandoc be installed and man(1) support the
 	# -w option
 	proc man {query} {
+		variable manexp
+
 		if {[auto_execok mandoc] eq ""} {
 			error "the man: shortcut requires mandoc"
 		}
 
-		regexp {([[:alnum:]\-_:\.]+)(\(([[:digit:]]?[[:lower:]]?)\))?} $query -> name -> section
+		regexp $manexp $query -> name -> section
+		# a stray empty argument will confuse man(1)
 		if {$section eq ""} {
 			set src [lindex [exec man -w $name] 0]
 		} else {
@@ -82,6 +111,21 @@ namespace eval shortcuts {
 		openurl $outname
 	}
 
+	# OpenBSD manpage search
+	proc om {query} {
+		variable manexp
+
+		regexp $manexp $query -> name -> section
+
+		set url "https://man.openbsd.org/$name"
+		# man.cgi is confused by a stray .
+		if {$section ne ""} {
+			set url ${url}.$section
+		}
+
+		openurl $url
+	}
+
 	# openports.pl pkgname search
 	proc op {pkgname} {
 		openurl https://openports.pl/search?[http::formatQuery pkgname $pkgname]
@@ -90,6 +134,16 @@ namespace eval shortcuts {
 	# Wikipedia search
 	proc wp {query} {
 		openurl https://en.wikipedia.org/w/index.php?[http::formatQuery search $query]
+	}
+
+	# Wiktionary search
+	proc wikt {query} {
+		openurl https://en.wiktionary.org/w/index.php?[http::formatQuery search $query]
+	}
+
+	# YouTube search
+	proc yt {query} {
+		openurl https://www.youtube.com/results?[http::formatQuery search_query $query]
 	}
 
 	proc unknown {shortcut args} {

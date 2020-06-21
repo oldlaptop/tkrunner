@@ -156,8 +156,18 @@ application with
 but other behaviors are possible.
 The currently implemented shortcuts are:
 .Bl -tag -width 8
+.It amazon
+Amazon.com search for the shortcut query.
+.It deb
+Debian package search for the shortcut query.
 .It dd
 DuckDuckGo search for the shortcut query.
+.It dman
+Debian manpage search for the shortcut query, interpreted as for the
+.Sy man
+shortcut.
+.It ebay
+eBay search for the shortcut query.
 .It gg
 Google search for the shortcut query.
 .It man
@@ -177,10 +187,18 @@ must be installed, and the system's implementation of
 must support the
 .Fl w
 option to print the paths to manual page source files.
+.It om
+man.openbsd.org search for the shortcut query, interpreted as for the
+.Sy man
+shortcut.
 .It op
 openports.pl pkgname search for the shortcut query.
 .It wp
 Wikipedia search for the shortcut query.
+.It wikt
+Wiktionary search for the shortcut query.
+.It yt
+YouTube search for the shortcut query.
 .El
 .Pp
 All shortcuts are implemented as commands in the ::trun::shortcuts namespace

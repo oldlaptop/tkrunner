@@ -146,9 +146,27 @@ xdg-open(1),
 but other behaviors are possible.
 The currently implemented shortcuts are:
 
+amazon
+
+> Amazon.com search for the shortcut query.
+
+deb
+
+> Debian package search for the shortcut query.
+
 dd
 
 > DuckDuckGo search for the shortcut query.
+
+dman
+
+> Debian manpage search for the shortcut query, interpreted as for the
+> **man**
+> shortcut.
+
+ebay
+
+> eBay search for the shortcut query.
 
 gg
 
@@ -173,6 +191,12 @@ man
 > **-w**
 > option to print the paths to manual page source files.
 
+om
+
+> man.openbsd.org search for the shortcut query, interpreted as for the
+> **man**
+> shortcut.
+
 op
 
 > openports.pl pkgname search for the shortcut query.
@@ -180,6 +204,14 @@ op
 wp
 
 > Wikipedia search for the shortcut query.
+
+wikt
+
+> Wiktionary search for the shortcut query.
+
+yt
+
+> YouTube search for the shortcut query.
 
 All shortcuts are implemented as commands in the ::trun::shortcuts namespace
 
