@@ -170,7 +170,7 @@ man
 > must be installed, and the system's implementation of
 > man(1)
 > must support the
-> **--w**
+> **-w**
 > option to print the paths to manual page source files.
 
 op
