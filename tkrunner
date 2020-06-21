@@ -86,7 +86,7 @@ proc hide {} { destroy .tkrunner }
 
 if {[tk appname tkrunner] ne "tkrunner"} {
 	# Tell the already-running tkrunner instance to show its "Run Command"
-	# toplevel and quit.
+	# toplevel.
 	send tkrunner show
 	exit
 } else {

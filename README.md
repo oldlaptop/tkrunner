@@ -23,7 +23,7 @@ in the background:
 
 	tkrunner -quiet &
 
-and then bound to a keyboard shortcut in your window manager.
+and then bound to a keyboard shortcut in your window manager or desktop environment.
 When
 **tkrunner**
 is first invoked, it displays its window
@@ -40,10 +40,8 @@ facility.
 The Run Command dialog accepts the full
 Tcl(n)
 syntax, with several extensions.
-Specifically, the environment it provides
-differs from a clean, default
-tclsh(1)
-session as follows:
+Specifically, the environment it provides differs from a clean, default Tcl
+interpreter as follows:
 
 *	The
 	http(n)
@@ -104,14 +102,23 @@ session as follows:
 		**::trun::shortcuts**
 		namespace, after replacing the colon with a space and concatenating all but the
 		first element in the Tcl list thus produced.
+		The commandline
+		'dd:tcl documentation'
+		is therefore transformed to
+		'dd {tcl documentation}'
+		and evaluated.
 
 	-	All other command lines are treated as
 		exec(n)
 		pipelines and passed to
 		**runcmd**.
 
-	Any command that causes the unknown handler to be invoked causes the dialog to
-	be hidden after a few seconds.
+	Any command that causes the unknown handler to be invoked also causes the dialog
+	to be hidden after a few seconds.
+
+*	The command
+	**hide**
+	is present in the root namespace, and causes the dialog box to hide itself.
 
 Commands entered at the dialog box are evaluated and their results displayed
 at the bottom of the dialog.
@@ -209,11 +216,28 @@ namespaces)
 
 	sin [/ [* 3 3.14159] 2]
 
+Start the spreadsheet program
+**abs**
+(found in the OpenBSD package of the same name),
+whose name clashes with the
+mathfunc(n)
+command
+**abs**
+(the
+';hide'
+at the end may be omitted, since it merely causes the dialog to hide itself
+after executing the command)
+:
+
+	runcmd abs ;hide
+
 # BUGS
 
 Much functionality remains to be implemented.
 
-Up-to-date information on any issues may be found on the Gitub issue tracker:
-https://github.com/oldlaptop/tkrunner/issues
+The GUI layout is still a rough prototype, and is subject to drastic changes.
+
+Up-to-date information on any issues may be found on the Github issue tracker:
+[https://github.com/oldlaptop/tkrunner/issues](https://github.com/oldlaptop/tkrunner/issues)
 
 OpenBSD 6.7 - June 21, 2020

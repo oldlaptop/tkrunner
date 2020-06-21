@@ -21,7 +21,7 @@ in the background:
 tkrunner -quiet &
 .Ed
 .Pp
-and then bound to a keyboard shortcut in your window manager.
+and then bound to a keyboard shortcut in your window manager or desktop environment.
 When
 .Nm
 is first invoked, it displays its window
@@ -36,10 +36,8 @@ facility.
 The Run Command dialog accepts the full
 .Xr Tcl n
 syntax, with several extensions.
-Specifically, the environment it provides
-differs from a clean, default
-.Xr tclsh 1
-session as follows:
+Specifically, the environment it provides differs from a clean, default Tcl
+interpreter as follows:
 .Bl -bullet
 .It
 The
@@ -102,14 +100,23 @@ Command lines that are valid shortcut specifications are evaluated in the
 .Sy ::trun::shortcuts
 namespace, after replacing the colon with a space and concatenating all but the
 first element in the Tcl list thus produced.
+The commandline
+.Sq dd:tcl documentation
+is therefore transformed to
+.Sq dd {tcl documentation}
+and evaluated.
 .It
 All other command lines are treated as
 .Xr exec n
 pipelines and passed to
 .Sy runcmd .
 .El
-Any command that causes the unknown handler to be invoked causes the dialog to
-be hidden after a few seconds.
+Any command that causes the unknown handler to be invoked also causes the dialog
+to be hidden after a few seconds.
+.It
+The command
+.Sy hide
+is present in the root namespace, and causes the dialog box to hide itself.
 .El
 .Pp
 Commands entered at the dialog box are evaluated and their results displayed
@@ -202,8 +209,27 @@ namespaces
 .Bd -literal -offset -indent
 sin [/ [* 3 3.14159] 2]
 .Ed
+.Pp
+Start the spreadsheet program
+.Sy abs
+.Pq found in the OpenBSD package of the same name ,
+whose name clashes with the
+.Xr mathfunc n
+command
+.Sy abs
+.Po
+the
+.Sq ;hide
+at the end may be omitted, since it merely causes the dialog to hide itself
+after executing the command
+.Pc :
+.Bd -literal -offset -indent
+runcmd abs ;hide
+.Ed
 .Sh BUGS
 Much functionality remains to be implemented.
 .Pp
-Up-to-date information on any issues may be found on the Gitub issue tracker:
-https://github.com/oldlaptop/tkrunner/issues
+The GUI layout is still a rough prototype, and is subject to drastic changes.
+.Pp
+Up-to-date information on any issues may be found on the Github issue tracker:
+.Lk https://github.com/oldlaptop/tkrunner/issues
