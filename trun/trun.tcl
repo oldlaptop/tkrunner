@@ -18,8 +18,6 @@ package provide trun 0.1
 
 namespace eval trun {
 
-namespace path [concat [namespace path] ::tcl::mathop ::tcl::mathfunc]
-
 proc runcmd {args} {
 	# we don't want the channel, just the filename
 	close [file tempfile spewfile trun.spew]
@@ -47,7 +45,6 @@ proc unknown {args} {
 		return [runcmd {*}$args]
 	}
 }
-namespace unknown unknown
 
 namespace eval shortcuts {
 	namespace path [concat [namespace path] [namespace parent]]

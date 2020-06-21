@@ -49,8 +49,12 @@ package is loaded.
 It is used internally for URL processing.
 .Pc
 .It
-All commands are evaluated in the namespace
-.Sy ::trun .
+The
+.Sy trun
+package is loaded, which provides the
+.Sy ::trun
+namespace
+.Pq described below .
 .It
 The default
 .Sy namespace path
@@ -58,7 +62,8 @@ contains the
 .Xr mathop n
 and
 .Xr mathfunc n
-namespaces.
+namespaces, as well as
+.Sy ::trun .
 .It
 The
 .Sy ::trun

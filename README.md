@@ -50,8 +50,12 @@ session as follows:
 	package is loaded.
 	(It is used internally for URL processing.)
 
-*	All commands are evaluated in the namespace
-	**::trun**.
+*	The
+	**trun**
+	package is loaded, which provides the
+	**::trun**
+	namespace
+	(described below).
 
 *	The default
 	**namespace path**
@@ -59,7 +63,8 @@ session as follows:
 	mathop(n)
 	and
 	mathfunc(n)
-	namespaces.
+	namespaces, as well as
+	**::trun**.
 
 *	The
 	**::trun**
