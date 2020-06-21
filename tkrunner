@@ -73,5 +73,20 @@ if {[tk appname tkrunner] ne "tkrunner"} {
 	exit
 } else {
 	wm withdraw .
-	show
+
+	set quiet no
+
+	foreach arg $argv {
+		switch -- $arg {
+			-quiet { set quiet yes }
+			default {
+				puts "error: unknown option $arg"
+				exit
+			}
+		}
+	}
+
+	if {!$quiet} {
+		show
+	}
 }
