@@ -24,7 +24,8 @@ tkrunner -quiet &
 and then bound to a keyboard shortcut in your window manager.
 When
 .Nm
-is first invoked, it displays its window (unless told otherwise with -quiet),
+is first invoked, it displays its window
+.Pq unless told otherwise with -quiet
 but stays resident after it is destroyed.
 Afterwards, when invoked again,
 .Nm
@@ -40,6 +41,13 @@ differs from a clean, default
 .Xr tclsh 1
 session as follows:
 .Bl -bullet
+.It
+The
+.Xr http n
+package is loaded.
+.Po
+It is used internally for URL processing.
+.Pc
 .It
 All commands are evaluated in the namespace
 .Sy ::trun .
@@ -85,13 +93,10 @@ facility is used to implement syntactic sugar as follows:
 Command lines that appear to be valid URLs are passed to
 .Sy openurl .
 .It
-Command lines that begin with a shortcut name and a colon, for example,
-.So
-wp:Main Page
-.Sc
-are evaluated in the
+Command lines that are valid shortcut specifications are evaluated in the
 .Sy ::trun::shortcuts
-namespace after replacing the colon with a space.
+namespace, after replacing the colon with a space and concatenating all but the
+first element in the Tcl list thus produced.
 .It
 All other command lines are treated as
 .Xr exec n
@@ -111,11 +116,50 @@ and therefore cannot directly introspect or mangle the main application's state,
 but it does have full control over its own state, and the full Tcl language at
 its disposal.
 .Ss SHORTCUTS
-No shortcuts are implemented yet.
-They are envisioned to function like the Web Shortcuts supported by
+Shortcuts are inspired by the Web Shortcuts supported by
 .Sy Konqueror
 and
 .Sy KRunner .
+Shortcut specifications consist of a shortcut name and a shortcut query,
+separated by a single colon, for example:
+.Bd -literal -offset -indent
+wp:Main Page
+.Ed
+.Pp
+Running a shortcut generally results in a URL being opened in the user's default
+application with
+.Xr xdg-open 1 ,
+but other behaviors are possible.
+The currently implemented shortcuts are:
+.Bl -tag -width 8
+.It dd
+DuckDuckGo search for the shortcut query.
+.It gg
+Google search for the shortcut query.
+.It man
+Local manpage search.
+The shortcut query is interpreted as a manual page
+specifier in the typical name(section) format; if the section is omitted,
+.Xr man 1
+will apply its default section matching rules, and the first matching page will
+be selected.
+The manual page will be formatted as HTML using
+.Xr mandoc 1
+and opened with
+.Xr xdg-open 1 .
+.Xr mandoc 1
+must be installed, and the system's implementation of
+.Xr man 1
+must support the
+.Fl -w
+option to print the paths to manual page source files.
+.It op
+openports.pl pkgname search for the shortcut query.
+.It wp
+Wikipedia search for the shortcut query.
+.El
+.Pp
+All shortcuts are implemented as commands in the ::trun::shortcuts namespace
 .Sh EXAMPLES
 Run a program in the default search path:
 .Bd -literal -offset -indent
@@ -126,8 +170,11 @@ Open a directory full of text files in
 .Xr kate 1
 using the
 .Xr glob n
-command (note that Tcl syntax applies, not the Bourne shell as in most other
-run-command dialog utilities):
+command
+.Po
+note that Tcl syntax applies, not the Bourne shell as in most other
+run-command dialog utilities
+.Pc :
 .Bd -literal -offset -indent
 kate [glob -types f /home/user/src/tkrunner/*]
 .Ed
@@ -139,11 +186,14 @@ command):
 expr {sin(3 * 3.14159 / 2)}
 .Ed
 .Pp
-Or in prefix notation (with the commands found in the
+Or in prefix notation
+.Po
+with the commands found in the
 .Xr mathop n
 and
 .Xr mathfunc n
-namespaces):
+namespaces
+.Pc :
 .Bd -literal -offset -indent
 sin [/ [* 3 3.14159] 2]
 .Ed
