@@ -200,9 +200,11 @@ run-command dialog utilities)
 
 	kate [glob -types f /home/user/src/tkrunner/*]
 
-Evaluate arithmetic expressions in infix notation (with the
+Evaluate arithmetic expressions in infix notation
+(with the
 expr(n)
-command):
+command)
+:
 
 	expr {sin(3 * 3.14159 / 2)}
 
