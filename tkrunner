@@ -56,7 +56,7 @@ proc show {} {
 		ttk::entry .tkrunner.f.cmdline -textvariable ::cmd
 		ttk::button .tkrunner.f.run -text Run -width 0 -command {
 			set ::msg [try {
-				interp eval runner "namespace eval trun $cmd"
+				interp eval runner "namespace eval trun \{$cmd\}"
 			} on error {err opts} {
 				expr {"error: $err"}
 			}]
