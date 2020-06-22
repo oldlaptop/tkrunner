@@ -238,7 +238,7 @@ command
 run-command dialog utilities)
 :
 
-	kate [glob -types f /home/user/src/tkrunner/*]
+	kate {*}[glob -types f /home/user/src/tkrunner/*]
 
 Evaluate arithmetic expressions in infix notation
 (with the
@@ -282,4 +282,4 @@ The GUI layout is still a rough prototype, and is subject to drastic changes.
 Up-to-date information on any issues may be found on the Github issue tracker:
 [https://github.com/oldlaptop/tkrunner/issues](https://github.com/oldlaptop/tkrunner/issues)
 
-OpenBSD 6.7 - June 21, 2020
+OpenBSD 6.7 - June 22, 2020
