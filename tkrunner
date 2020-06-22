@@ -14,7 +14,9 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-package require Tk 8.6
+# {*} and ttk
+package require Tcl 8.5
+package require Tk 8.5
 
 set cmd {}
 set history {}
