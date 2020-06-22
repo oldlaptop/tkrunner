@@ -55,6 +55,9 @@ proc show {} {
 	} else {
 		set ::cmd {}
 
+		# Most themes have buttons that are just too large.
+		ttk::style configure Run.TKRunner.TButton -padding 1
+
 		toplevel .tkrunner
 		wm title .tkrunner "Run Command"
 
@@ -76,7 +79,8 @@ proc show {} {
 
 			set ::hpointer -1
 			set ::cmd {}
-		}
+		} -style Run.TKRunner.TButton
+
 		text .tkrunner.f.msg -width 80 -height 4 -wrap char \
 			-yscrollcommand { .tkrunner.f.scr set }
 		.tkrunner.f.msg tag configure history_line \
