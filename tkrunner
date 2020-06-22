@@ -51,7 +51,6 @@ proc pad_grid_widgets {widgets {amt 1}} {
 proc show {} {
 	if {[winfo exists .tkrunner]} {
 		wm deiconify .tkrunner
-		focus -force .tkrunner
 	} else {
 		set ::cmd {}
 
@@ -142,6 +141,8 @@ proc show {} {
 		bind .tkrunner <KeyPress-Escape> { hide }
 		wm protocol .tkrunner WM_DELETE_WINDOW { hide }
 	}
+
+	focus -force .tkrunner.f.cmdline
 }
 
 # hide the "Run Command" toplevel
