@@ -17,7 +17,10 @@
 package require Tk 8.6
 
 set cmd {}
-set msg {}
+set history {}
+# Relative to the end; an hpointer of 1 corresponds to a list index of end-1.
+# Note that [lindex /foo/ end--1] is the empty string.
+set hpointer -1
 
 interp create runner
 interp eval runner {
@@ -47,9 +50,9 @@ proc pad_grid_widgets {widgets {amt 1}} {
 # define (if necessary) and show the "Run Command" toplevel
 proc show {} {
 	if {[winfo exists .tkrunner]} {
+		wm deiconify .tkrunner
 		focus -force .tkrunner
 	} else {
-		set ::msg {}
 		set ::cmd {}
 
 		toplevel .tkrunner
@@ -58,17 +61,52 @@ proc show {} {
 		ttk::frame .tkrunner.f
 		ttk::entry .tkrunner.f.cmdline -textvariable ::cmd
 		ttk::button .tkrunner.f.run -text Run -width 0 -command {
-			set ::msg [try {
+			if {$::history ne ""} {
+				.tkrunner.f.msg ins end \n
+			}
+
+			lappend ::history $::cmd
+
+			.tkrunner.f.msg ins end "[llength $::history]: [try {
 				interp eval runner $cmd
 			} on error {err opts} {
 				expr {"error: $err"}
-			}]
+			}]" history_line
+			.tkrunner.f.msg see end
+
+			set ::hpointer -1
+			set ::cmd {}
 		}
-		ttk::label .tkrunner.f.msg -textvariable ::msg
+		text .tkrunner.f.msg -width 80 -height 4 -wrap char \
+			-yscrollcommand { .tkrunner.f.scr set }
+		.tkrunner.f.msg tag configure history_line \
+			-lmargin2 [expr {[tk scaling] * 8}]
+		# raw read-only wrapper inspired by the example at
+		# https://wiki.tcl-lang.org/page/Read%2Donly+text+widget
+		rename .tkrunner.f.msg @internal.tkrunner.f.msg
+		proc .tkrunner.f.msg {args} {
+			switch -- [lindex $args 0] {
+				insert {}
+				delete {}
+				replace {}
+				ins {
+					return [@internal.tkrunner.f.msg insert {*}[lrange $args 1 end]]
+				}
+				default {
+					return [@internal.tkrunner.f.msg {*}$args]
+				}
+			}
+		}
 
-		grid .tkrunner.f.cmdline .tkrunner.f.run -sticky ew
-		grid .tkrunner.f.msg     -      -sticky ew
+		ttk::scrollbar .tkrunner.f.scr -orient vertical -command {
+			.tkrunner.f.msg yview
+		}
 
+		grid .tkrunner.f.cmdline .tkrunner.f.run -               -sticky ew
+		grid .tkrunner.f.msg     -               .tkrunner.f.scr -sticky nsew
+
+		grid columnconfigure .tkrunner.f 0 -weight 1
+		grid rowconfigure .tkrunner.f 1 -weight 1
 		pad_grid_widgets [winfo children .tkrunner.f]
 
 		pack .tkrunner.f -expand y -fill both
@@ -76,13 +114,27 @@ proc show {} {
 		wm attributes .tkrunner -topmost yes
 		focus .tkrunner.f.cmdline
 
+		bind .tkrunner.f.cmdline <KeyPress-Up> {
+			if {$::hpointer < ([llength $::history] - 1)} {
+				incr ::hpointer
+			}
+			set ::cmd [lindex $::history end-$::hpointer]
+		}
+		bind .tkrunner.f.cmdline <KeyPress-Down> {
+			if {$::hpointer >= 0} {
+				set ::cmd [lindex $::history end-[incr ::hpointer -1]]
+			} else {
+				set ::cmd {}
+			}
+		}
 		bind .tkrunner <KeyPress-Return> { .tkrunner.f.run invoke }
 		bind .tkrunner <KeyPress-Escape> { hide }
+		wm protocol .tkrunner WM_DELETE_WINDOW { hide }
 	}
 }
 
-# hide (actually destroy, for now) the "Run Command" toplevel
-proc hide {} { destroy .tkrunner }
+# hide the "Run Command" toplevel
+proc hide {} { wm withdraw .tkrunner }
 
 if {[tk appname tkrunner] ne "tkrunner"} {
 	# Tell the already-running tkrunner instance to show its "Run Command"
