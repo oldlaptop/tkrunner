@@ -62,6 +62,7 @@ proc show {} {
 		wm title .tkrunner "Run Command"
 
 		ttk::frame .tkrunner.f
+		ttk::label .tkrunner.f.hc -text 1 -width 2
 		ttk::entry .tkrunner.f.cmdline -textvariable ::cmd
 		ttk::button .tkrunner.f.run -text Run -width 0 -command {
 			if {$::history ne ""} {
@@ -69,8 +70,10 @@ proc show {} {
 			}
 
 			lappend ::history $::cmd
+			set n [llength $::history]
+			.tkrunner.f.hc configure -text [expr {$n + 1}]
 
-			.tkrunner.f.msg ins end "[llength $::history]: [try {
+			.tkrunner.f.msg ins end "$n: [try {
 				interp eval runner $cmd
 			} on error {err opts} {
 				expr {"error: $err"}
@@ -106,10 +109,10 @@ proc show {} {
 			.tkrunner.f.msg yview
 		}
 
-		grid .tkrunner.f.cmdline .tkrunner.f.run -               -sticky ew
-		grid .tkrunner.f.msg     -               .tkrunner.f.scr -sticky nsew
+		grid .tkrunner.f.hc  .tkrunner.f.cmdline .tkrunner.f.run -               -sticky ew
+		grid .tkrunner.f.msg -                   -               .tkrunner.f.scr -sticky nsew
 
-		grid columnconfigure .tkrunner.f 0 -weight 1
+		grid columnconfigure .tkrunner.f 1 -weight 1
 		grid rowconfigure .tkrunner.f 1 -weight 1
 		pad_grid_widgets [winfo children .tkrunner.f]
 
@@ -119,16 +122,20 @@ proc show {} {
 		focus .tkrunner.f.cmdline
 
 		bind .tkrunner.f.cmdline <KeyPress-Up> {
-			if {$::hpointer < ([llength $::history] - 1)} {
+			set n [llength $::history]
+			if {$::hpointer < ($n - 1)} {
 				incr ::hpointer
+				.tkrunner.f.hc configure -text [expr {$n - $::hpointer}]
 			}
 			set ::cmd [lindex $::history end-$::hpointer]
 		}
 		bind .tkrunner.f.cmdline <KeyPress-Down> {
 			if {$::hpointer >= 0} {
 				set ::cmd [lindex $::history end-[incr ::hpointer -1]]
+				.tkrunner.f.hc configure -text [expr {$n - $::hpointer}]
 			} else {
 				set ::cmd {}
+				.tkrunner.f.hc configure -text [expr {$n + 1}]
 			}
 		}
 		bind .tkrunner <KeyPress-Return> { .tkrunner.f.run invoke }

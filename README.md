@@ -120,14 +120,22 @@ interpreter as follows:
 	**hide**
 	is present in the root namespace, and causes the dialog box to hide itself.
 
-Commands entered at the dialog box are evaluated and their results displayed
-at the bottom of the dialog.
+Commands entered at the dialog box are evaluated and their results added to the
+history display at the bottom of the dialog, preceded by a sequence number
+indicating which command produced the results.
 Any errors are also caught and indicated here.
-This environment is a child
+The command itself is also added to the command history, which may be navigated
+by pressing the Up and Down keys while the command entry widget has input focus.
+The numeric indicator to the left of the command entry widget will update to
+show which results in the output history it corresponds to.
+
+The execution environment provided by
+**tkrunner**
+is a child
 interp(n)
 and therefore cannot directly introspect or mangle the main application's state,
-but it does have full control over its own state, and the full Tcl language at
-its disposal.
+but it does have full control over its own state, and the full Tcl language is
+at its disposal.
 
 ## SHORTCUTS
 
