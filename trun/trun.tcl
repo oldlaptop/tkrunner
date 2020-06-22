@@ -12,8 +12,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-# http::quoteString
-package require http 2.9.1
+package require http
 
 package provide trun 0.1
 
@@ -59,6 +58,9 @@ namespace eval shortcuts {
 
 	# Debian package search
 	proc deb {query} {
+		# quoteString
+		package require http 2.9.1
+
 		openurl https://packages.debian.org/[http::quoteString $query]
 	}
 
