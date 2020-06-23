@@ -13,7 +13,7 @@ default:
 	@echo "LIB = $(LIB)"
 	@echo "BIN = $(BIN)"
 	@echo "MAN = $(MAN)"
-	@echo "XDG_APPLICATIONS = $(XDG_APPLICATIONS)
+	@echo "XDG_APPLICATIONS = $(XDG_APPLICATIONS)"
 
 install:
 	mkdir -p $(LIB)
