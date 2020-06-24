@@ -79,15 +79,15 @@ The
 .Sy ::trun
 namespace itself provides several commands:
 .Bl -tag -width 8
-.It runcmd
+.It Cm runcmd Ar arg Op arg...
 Accepts the same pipeline syntax as
 .Xr exec n
 while automatically redirecting pipeline output to a temporary file, and
 backgrounding the pipeline.
-.It openurl
-Expects a single
-.Em url
-argument, and passes it to
+.It Cm openurl Ar url
+Passes its
+.Ar url
+argument directly to
 .Xr xdg-open 1
 via runcmd.
 .El
