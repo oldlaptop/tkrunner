@@ -49,6 +49,26 @@ proc pad_grid_widgets {widgets {amt 1}} {
 	}
 }
 
+# Run a command, properly adding it to the history.
+proc run {cmd} {
+	if {$::history ne ""} {
+		.tkrunner.f.msg ins end \n
+	}
+
+	lappend ::history $cmd
+	set n [llength $::history]
+	.tkrunner.f.hc configure -text [expr {$n + 1}]
+
+	.tkrunner.f.msg ins end "$n: [try {
+		interp eval runner $cmd
+	} on error {err opts} {
+		expr {"error: $err"}
+	}]" history_line
+	.tkrunner.f.msg see end
+
+	set ::hpointer -1
+}
+
 # define (if necessary) and show the "Run Command" toplevel
 proc show {} {
 	if {[winfo exists .tkrunner]} {
@@ -66,22 +86,7 @@ proc show {} {
 		ttk::label .tkrunner.f.hc -text 1 -width 2
 		ttk::entry .tkrunner.f.cmdline -textvariable ::cmd
 		ttk::button .tkrunner.f.run -text Run -width 0 -command {
-			if {$::history ne ""} {
-				.tkrunner.f.msg ins end \n
-			}
-
-			lappend ::history $::cmd
-			set n [llength $::history]
-			.tkrunner.f.hc configure -text [expr {$n + 1}]
-
-			.tkrunner.f.msg ins end "$n: [try {
-				interp eval runner $cmd
-			} on error {err opts} {
-				expr {"error: $err"}
-			}]" history_line
-			.tkrunner.f.msg see end
-
-			set ::hpointer -1
+			run $::cmd
 			set ::cmd {}
 		} -style Run.TKRunner.TButton
 

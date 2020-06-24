@@ -209,7 +209,24 @@ Wiktionary search for the shortcut query.
 YouTube search for the shortcut query.
 .El
 .Pp
-All shortcuts are implemented as commands in the ::trun::shortcuts namespace
+All shortcuts are implemented as commands in the ::trun::shortcuts namespace.
+.Sh REMOTE-CALLABLE COMMANDS
+The following commands are defined in the application's root interpreter and may
+be called by other Tk applications with
+.Xr send n .
+.Nm
+uses
+.Dq tkrunner
+as its Tk application name.
+.Bl -tag -width 8
+.It Cm show
+Shows the Run Command dialog, raising its focus it it is already shown.
+.It Cm hide
+Hides the Run Command dialog, if it is shown.
+.It Cm run Ar cmd
+Run a command as though it was entered at the dialog box, properly registering
+it in the command history.
+.El
 .Sh EXAMPLES
 Run a program in the default search path:
 .Bd -literal -offset -indent
