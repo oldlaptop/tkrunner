@@ -68,18 +68,18 @@ interpreter as follows:
 	**::trun**
 	namespace itself provides several commands:
 
-	runcmd
+	**runcmd** *arg* \[arg...]
 
 	> Accepts the same pipeline syntax as
 	> exec(n)
 	> while automatically redirecting pipeline output to a temporary file, and
 	> backgrounding the pipeline.
 
-	openurl
+	**openurl** *url*
 
-	> Expects a single
+	> Passes its
 	> *url*
-	> argument, and passes it to
+	> argument directly to
 	> xdg-open(1)
 	> via runcmd.
 
@@ -154,40 +154,41 @@ xdg-open(1),
 but other behaviors are possible.
 The currently implemented shortcuts are:
 
-amazon
+**amazon**
 
 > Amazon.com search for the shortcut query.
 
-deb
+**deb**
 
 > Debian package search for the shortcut query.
 
-dd
+**dd**
 
 > DuckDuckGo search for the shortcut query.
 
-dman
+**dman**
 
 > Debian manpage search for the shortcut query, interpreted as for the
 > **man**
 > shortcut.
 
-ebay
+**ebay**
 
 > eBay search for the shortcut query.
 
-gg
+**gg**
 
 > Google search for the shortcut query.
 
-man
+**man**
 
 > Local manpage search.
 > The shortcut query is interpreted as a manual page
-> specifier in the typical name(section) format; if the section is omitted,
+> specifier in the typical name(section) format, and a lookup is performed with
+> man(1);
+> if the section is omitted, the section argument to
 > man(1)
-> will apply its default section matching rules, and the first matching page will
-> be selected.
+> will be omitted, and the first matching page will be selected.
 > The manual page will be formatted as HTML using
 > mandoc(1)
 > and opened with
@@ -199,29 +200,52 @@ man
 > **-w**
 > option to print the paths to manual page source files.
 
-om
+**om**
 
 > man.openbsd.org search for the shortcut query, interpreted as for the
 > **man**
 > shortcut.
 
-op
+**op**
 
 > openports.pl pkgname search for the shortcut query.
 
-wp
+**wp**
 
 > Wikipedia search for the shortcut query.
 
-wikt
+**wikt**
 
 > Wiktionary search for the shortcut query.
 
-yt
+**yt**
 
 > YouTube search for the shortcut query.
 
-All shortcuts are implemented as commands in the ::trun::shortcuts namespace
+All shortcuts are implemented as commands in the ::trun::shortcuts namespace.
+
+# REMOTE-CALLABLE COMMANDS
+
+The following commands are defined in the application's root interpreter and may
+be called by other Tk applications with
+send(n).
+**tkrunner**
+uses
+"tkrunner"
+as its Tk application name.
+
+**show**
+
+> Shows the Run Command dialog, raising its focus it it is already shown.
+
+**hide**
+
+> Hides the Run Command dialog, if it is shown.
+
+**run** *cmd*
+
+> Run a command as though it was entered at the dialog box, properly registering
+> it in the command history.
 
 # EXAMPLES
 
@@ -282,4 +306,4 @@ The GUI layout is still a rough prototype, and is subject to drastic changes.
 Up-to-date information on any issues may be found on the Github issue tracker:
 [https://github.com/oldlaptop/tkrunner/issues](https://github.com/oldlaptop/tkrunner/issues)
 
-OpenBSD 6.7 - June 22, 2020
+OpenBSD 6.7 - June 24, 2020
