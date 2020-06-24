@@ -181,10 +181,11 @@ Google search for the shortcut query.
 .It Cm man
 Local manpage search.
 The shortcut query is interpreted as a manual page
-specifier in the typical name(section) format; if the section is omitted,
+specifier in the typical name(section) format, and a lookup is performed with
+.Xr man 1 ;
+if the section is omitted, the section argument to
 .Xr man 1
-will apply its default section matching rules, and the first matching page will
-be selected.
+will be omitted, and the first matching page will be selected.
 The manual page will be formatted as HTML using
 .Xr mandoc 1
 and opened with
