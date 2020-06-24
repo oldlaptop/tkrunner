@@ -20,7 +20,7 @@ namespace eval trun {
 
 proc runcmd {args} {
 	# we don't want the channel, just the filename
-	close [file tempfile spewfile trun.spew]
+	close [file tempfile spewfile trun-[lindex $args 0].spew]
 	exec -ignorestderr -- >>& $spewfile {*}$args &
 	return "launched exec(n) pipeline `$args &` (output in $spewfile)"
 }
@@ -106,7 +106,7 @@ namespace eval shortcuts {
 			set src [exec man -w $section $name]
 		}
 
-		set outchan [file tempfile outname tkrunner-man.html]
+		set outchan [file tempfile outname tkrunner-man-${name}_${section}.html]
 		try {
 			exec mandoc -T html $src >@ $outchan
 		} finally {
