@@ -30,8 +30,9 @@ proc openurl {url} {
 }
 
 proc unknown {args} {
-	# if we have a URL (regexp from RFC3986 with parts 1 and 3 made mandatory)
-	if {[regexp {^(([^:/?#]+):)(//([^/?#]*))([^?#]*)(\?([^#]*))?(#(.*))?} $args]} {
+	# if we have a URL (regexp from RFC3986 with parts 1 and 3 made mandatory,
+	# and internal spaces disallowed in the protocol and host)
+	if {[regexp {^(([^:/?#[:space:]]+):)(//([^/?#[:space:]]*))([^?#]*)(\?([^#]*))?(#(.*))?} $args]} {
 		return [openurl $args]
 	# if we have a shortcut spec...
 	} elseif {[regexp {^[a-z]+:[^:]} $args]} {
