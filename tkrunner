@@ -134,6 +134,7 @@ proc show {} {
 				.tkrunner.f.hc configure -text [expr {$n - $::hpointer}]
 			}
 			set ::cmd [lindex $::history end-$::hpointer]
+			%W icursor end
 		}
 		bind .tkrunner.f.cmdline <KeyPress-Down> {
 			if {$::hpointer >= 0} {
@@ -143,6 +144,7 @@ proc show {} {
 				set ::cmd {}
 				.tkrunner.f.hc configure -text [expr {$n + 1}]
 			}
+			%W icursor end
 		}
 		bind .tkrunner <KeyPress-Return> { .tkrunner.f.run invoke }
 		bind .tkrunner <KeyPress-Escape> { hide }
