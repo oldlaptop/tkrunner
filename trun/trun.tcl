@@ -28,6 +28,7 @@ proc runcmd {args} {
 proc openurl {url} {
 	runcmd xdg-open $url
 }
+interp alias {} go {} openurl
 
 proc unknown {args} {
 	# if we have a URL (regexp from RFC3986 with parts 1 and 3 made mandatory,

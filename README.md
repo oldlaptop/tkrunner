@@ -83,6 +83,11 @@ interpreter as follows:
 	> xdg-open(1)
 	> via runcmd.
 
+	**go** *url*
+
+	> Alias to
+	> **openurl**.
+
 *	The
 	**::trun**
 	namespace contains a child namespace called
@@ -306,4 +311,4 @@ The GUI layout is still a rough prototype, and is subject to drastic changes.
 Up-to-date information on any issues may be found on the Github issue tracker:
 [https://github.com/oldlaptop/tkrunner/issues](https://github.com/oldlaptop/tkrunner/issues)
 
-OpenBSD 6.7 - June 24, 2020
+OpenBSD 6.7 - August 22, 2020

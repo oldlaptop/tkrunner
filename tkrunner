@@ -31,8 +31,6 @@ interp eval runner {
 	namespace path [concat [namespace path] ::tcl::mathop ::tcl::mathfunc ::trun]
 	namespace unknown ::trun::unknown
 
-	set hide_delay 2000
-
 	trace add execution trun::unknown leave {apply { {cmd code result op} {
 		if {!$code} {
 			after 2000 hide
