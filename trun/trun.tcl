@@ -12,6 +12,10 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+# {*}
+package require Tcl 8.5
+
+# used for ::http::formatQuery
 package require http
 
 package provide trun 0.1
