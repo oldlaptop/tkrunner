@@ -141,6 +141,17 @@ namespace eval shortcuts {
 		openurl https://openports.pl/search?[http::formatQuery pkgname $pkgname]
 	}
 
+	# TIPs by number
+	proc tip {n} {
+		set n [expr {entier($n)}]
+		openurl https://core.tcl-lang.org/tips/doc/trunk/tip/$n.md
+	}
+
+	# TIP search
+	proc tips {query} {
+		openurl https://core.tcl-lang.org/tips/search?s=[http::formatQuery s $query]&y=all
+	}
+
 	# Wikipedia search
 	proc wp {query} {
 		openurl https://en.wikipedia.org/w/index.php?[http::formatQuery search $query]

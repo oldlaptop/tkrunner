@@ -215,6 +215,15 @@ The currently implemented shortcuts are:
 
 > openports.pl pkgname search for the shortcut query.
 
+**tip**
+
+> Interpret the shortcut query as a Tcl Improvement Proposal (TIP) number and open
+> it.
+
+**tips**
+
+> Search Tcl Improvement Proposals for the shortcut query.
+
 **wp**
 
 > Wikipedia search for the shortcut query.
