@@ -112,12 +112,18 @@ namespace eval shortcuts {
 			set src [exec man -w $section $name]
 		}
 
-		set outchan [file tempfile outname tkrunner-man-${name}_${section}.html]
-		try {
-			exec mandoc -T html $src >@ $outchan
-		} finally {
-			close $outchan
+		if {[string match */cat*/*.0 $src]} {
+			# Display unformatted pages directly.
+			set outname $src
+		} else {
+			set outchan [file tempfile outname tkrunner-man-${name}_${section}.html]
+			try {
+				exec mandoc -T html $src >@ $outchan
+			} finally {
+				close $outchan
+			}
 		}
+
 		openurl $outname
 	}
 
