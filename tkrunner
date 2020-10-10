@@ -77,6 +77,7 @@ proc snap2mouse {w} {
 # define (if necessary) and show the "Run Command" toplevel
 proc show {} {
 	if {[winfo exists .tkrunner]} {
+		wm withdraw .tkrunner
 		wm deiconify .tkrunner
 	} else {
 		set ::cmd {}
