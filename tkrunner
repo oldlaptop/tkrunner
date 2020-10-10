@@ -67,6 +67,13 @@ proc run {cmd} {
 	set ::hpointer -1
 }
 
+# move a window under the mouse
+proc snap2mouse {w} {
+	set xpos [expr {[winfo pointerx $w] - ([winfo width $w] / 2)}]
+	set ypos [expr {[winfo pointery $w] - ([winfo height $w] / 2)}]
+	wm geometry $w +$xpos+$ypos
+}
+
 # define (if necessary) and show the "Run Command" toplevel
 proc show {} {
 	if {[winfo exists .tkrunner]} {
@@ -79,6 +86,7 @@ proc show {} {
 
 		toplevel .tkrunner
 		wm title .tkrunner "Run Command"
+		wm attributes .tkrunner -topmost yes
 
 		ttk::frame .tkrunner.f
 		ttk::label .tkrunner.f.hc -text 1 -width 2
@@ -146,10 +154,13 @@ proc show {} {
 		}
 		bind .tkrunner <KeyPress-Return> { .tkrunner.f.run invoke }
 		bind .tkrunner <KeyPress-Escape> { hide }
+		bind .tkrunner <Map> {
+			snap2mouse .tkrunner
+			focus -force .tkrunner.f.cmdline
+		}
+
 		wm protocol .tkrunner WM_DELETE_WINDOW { hide }
 	}
-
-	focus -force .tkrunner.f.cmdline
 }
 
 # hide the "Run Command" toplevel
