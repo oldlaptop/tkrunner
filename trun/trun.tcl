@@ -127,19 +127,30 @@ namespace eval shortcuts {
 		openurl $outname
 	}
 
-	# OpenBSD manpage search
-	proc om {query} {
+	# Helper for man.cgi manpage searches.
+	proc Man.cgi {url query} {
 		variable manexp
 
 		regexp $manexp $query -> name -> section
 
-		set url "https://man.openbsd.org/$name"
+		set url $url/$name
+
 		# man.cgi is confused by a stray .
 		if {$section ne ""} {
 			set url ${url}.$section
 		}
 
 		openurl $url
+	}
+
+	# OpenBSD manpage search
+	proc om {query} {
+		Man.cgi "https://man.openbsd.org" $query
+	}
+
+	# man.bsd.lv manpage search
+	proc mbl {query} {
+		Man.cgi "https://man.bsd.lv" $query
 	}
 
 	# openports.pl pkgname search
