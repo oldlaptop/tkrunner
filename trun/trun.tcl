@@ -166,7 +166,17 @@ namespace eval shortcuts {
 
 	# TIP search
 	proc tips {query} {
-		openurl https://core.tcl-lang.org/tips/search?s=[http::formatQuery s $query]&y=all
+		openurl https://core.tcl-lang.org/tips/search?[http::formatQuery s $query]&y=all
+	}
+
+	# Tcl wiki full-text search
+	proc tw {query} {
+		openurl https://wiki.tcl-lang.org/search?[http::formatQuery Q $query]
+	}
+
+	# Wolfram Alpha query
+	proc wa {query} {
+		openurl https://www.wolframalpha.com/input/?[http::formatQuery i $query]
 	}
 
 	# Wikipedia search
