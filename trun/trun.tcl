@@ -44,7 +44,7 @@ proc unknown {args} {
 		# Try it as a shortcut
 		set pivot [string first : $args]
 		set spec [string replace $args $pivot $pivot { }]
-		set script [list [lindex $spec 0] [lrange $spec 1 end]]
+		set script [list [lindex $spec 0] [join [lrange $spec 1 end] { }]]
 
 		return [namespace eval [namespace current]::shortcuts $script]
 	# otherwise treat it as an exec(n) pipeline
