@@ -42,9 +42,9 @@ proc unknown {args} {
 	# if we have a shortcut spec...
 	} elseif {[regexp {^[a-z]+:[^:]} $args]} {
 		# Try it as a shortcut
-		set pivot [string first : $args]
-		set spec [string replace $args $pivot $pivot { }]
-		set script [list [lindex $spec 0] [join [lrange $spec 1 end] { }]]
+		set spec [join $args]
+		set pivot [string first : $spec]
+		set script [list [string range $spec 0 $pivot-1] [string range $spec $pivot+1 end]]
 
 		return [namespace eval [namespace current]::shortcuts $script]
 	# otherwise treat it as an exec(n) pipeline
