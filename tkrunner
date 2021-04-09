@@ -153,7 +153,9 @@ proc show {} {
 			}
 			%W icursor end
 		}
-		bind .tkrunner <KeyPress-Return> { .tkrunner.f.run invoke }
+		foreach key {Return KP_Enter} {
+			bind .tkrunner <KeyPress-$key> { .tkrunner.f.run invoke }
+		}
 		bind .tkrunner <KeyPress-Escape> { hide }
 		bind .tkrunner <Map> {
 			snap2mouse .tkrunner
