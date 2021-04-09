@@ -34,11 +34,15 @@ proc openurl {url} {
 }
 interp alias {} go {} openurl
 
+proc 1glob {args} {
+	lindex [glob $args] 0
+}
+
 proc unknown {args} {
 	# if we have a URL (regexp from RFC3986 with parts 1 and 3 made mandatory,
 	# and internal spaces disallowed in the protocol and host)
 	if {[regexp {^(([^:/?#[:space:]]+):)(//([^/?#[:space:]]*))([^?#]*)(\?([^#]*))?(#(.*))?} $args]} {
-		return [openurl $args]
+		return [openurl [join $args]]
 	# if we have a shortcut spec...
 	} elseif {[regexp {^[a-z]+:[^:]} $args]} {
 		# Try it as a shortcut

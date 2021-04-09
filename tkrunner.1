@@ -79,6 +79,11 @@ The
 .Sy ::trun
 namespace itself provides several commands:
 .Bl -tag -width 8
+.It Cm 1glob Ar arg Op arg...
+Identical to
+.Xr glob n ,
+but returns only the first element of the list of matches; useful for specifying
+URLs.
 .It Cm runcmd Ar arg Op arg...
 Accepts the same pipeline syntax as
 .Xr exec n
