@@ -68,6 +68,13 @@ interpreter as follows:
 	**::trun**
 	namespace itself provides several commands:
 
+	**1glob** *arg* \[arg...]
+
+	> Identical to
+	> glob(n),
+	> but returns only the first element of the list of matches; useful for specifying
+	> URLs.
+
 	**runcmd** *arg* \[arg...]
 
 	> Accepts the same pipeline syntax as
@@ -278,6 +285,14 @@ run-command dialog utilities)
 
 	kate {*}[glob -types f /home/user/src/tkrunner/*]
 
+Open a file under the current user's home directory; note the use of the
+**1glob**
+command to avoid the need for a construct like
+"\[lindex \[glob ~/downloads/paper.pdf] 0]"
+:
+
+	file://[1glob ~/Downloads/paper.pdf]
+
 Evaluate arithmetic expressions in infix notation
 (with the
 expr(n)
@@ -298,8 +313,8 @@ namespaces)
 
 Start the spreadsheet program
 **abs**
-(found in the OpenBSD package of the same name),
-whose name clashes with the
+(once found in an OpenBSD package of the same name),
+whose name clashed with the
 mathfunc(n)
 command
 **abs**
@@ -320,4 +335,4 @@ The GUI layout is still a rough prototype, and is subject to drastic changes.
 Up-to-date information on any issues may be found on the Github issue tracker:
 [https://github.com/oldlaptop/tkrunner/issues](https://github.com/oldlaptop/tkrunner/issues)
 
-OpenBSD 6.7 - August 22, 2020
+OpenBSD 6.9 - April 9, 2021
