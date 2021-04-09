@@ -260,6 +260,16 @@ run-command dialog utilities
 kate {*}[glob -types f /home/user/src/tkrunner/*]
 .Ed
 .Pp
+Open a file under the current user's home directory; note the use of the
+.Sy 1glob
+command to avoid the need for a construct like
+.Qo
+[lindex [glob ~/downloads/paper.pdf] 0]
+.Qc :
+.Bd -literal -offset -indent
+file://[1glob ~/Downloads/paper.pdf]
+.Ed
+.Pp
 Evaluate arithmetic expressions in infix notation
 .Po with the
 .Xr expr n
