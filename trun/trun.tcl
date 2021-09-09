@@ -173,6 +173,11 @@ namespace eval shortcuts {
 		openurl https://core.tcl-lang.org/tips/search?[http::formatQuery s $query]&y=all
 	}
 
+	# Tcl core commits
+	proc thash {hash} {
+		openurl https://core.tcl-lang.org/redirect?[http::formatQuery name $hash]
+	}
+
 	# Tcl wiki full-text search
 	proc tw {query} {
 		openurl https://wiki.tcl-lang.org/search?[http::formatQuery Q $query]
