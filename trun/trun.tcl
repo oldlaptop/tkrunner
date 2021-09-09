@@ -170,7 +170,7 @@ namespace eval shortcuts {
 
 	# TIP search
 	proc tips {query} {
-		openurl https://core.tcl-lang.org/tips/search?[http::formatQuery s $query]&y=all
+		openurl https://core.tcl-lang.org/tips/search?[http::formatQuery s $query y all]
 	}
 
 	# Tcl core commits
