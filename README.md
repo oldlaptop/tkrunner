@@ -110,10 +110,12 @@ interpreter as follows:
 	-	Command lines that appear to be valid URLs are passed to
 		**openurl**.
 
-	-	Command lines that are valid shortcut specifications are evaluated in the
+	-	Command lines that are valid shortcut specifications are transformed into a Tcl
+		list with the portion before the first colon as the first element, and the
+		portion after the first colon as the second element; the result is then
+		evaluated in the
 		**::trun::shortcuts**
-		namespace, after replacing the colon with a space and concatenating all but the
-		first element in the Tcl list thus produced.
+		namespace as a command.
 		The commandline
 		'dd:tcl documentation'
 		is therefore transformed to
