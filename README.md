@@ -342,6 +342,10 @@ after executing the command)
 
 	runcmd abs ;hide
 
+See where the clever and pithy quote below came from:
+
+	yt:Red Green temporary, unless it works
+
 # BUGS
 
 Much functionality remains to be implemented.
@@ -355,4 +359,4 @@ It should still be considered changeable at the whim of the author.
 Up-to-date information on any issues may be found on the Github issue tracker:
 [https://github.com/oldlaptop/tkrunner/issues](https://github.com/oldlaptop/tkrunner/issues)
 
-Void Linux - September 12, 2021
+OpenBSD 6.9 - September 12, 2021
