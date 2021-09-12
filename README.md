@@ -218,6 +218,12 @@ The currently implemented shortcuts are:
 > **man**
 > shortcut.
 
+**mbl**
+
+> man.bsd.lv search for the shortcut query, interpreted as for the
+> **man**
+> shortcut.
+
 **op**
 
 > openports.pl pkgname search for the shortcut query.
@@ -230,6 +236,16 @@ The currently implemented shortcuts are:
 **tips**
 
 > Search Tcl Improvement Proposals for the shortcut query.
+
+**thash**
+
+> Interpret the shortcut query as a commit hash in one of the
+> [https://core.tcl-lang.org](https://core.tcl-lang.org)
+> fossil repositories and attempt to open it.
+
+**tw**
+
+> Full-text Tcl wiki search for the shortcut query.
 
 **wp**
 
@@ -330,9 +346,13 @@ after executing the command)
 
 Much functionality remains to be implemented.
 
-The GUI layout is still a rough prototype, and is subject to drastic changes.
+The GUI layout originated as a rough prototype, but seems to be working well.
+It should still be considered changeable at the whim of the author.
+
+> "This is only temporary, unless it works."
+> &#8212; Red Green
 
 Up-to-date information on any issues may be found on the Github issue tracker:
 [https://github.com/oldlaptop/tkrunner/issues](https://github.com/oldlaptop/tkrunner/issues)
 
-OpenBSD 6.9 - April 9, 2021
+Void Linux - September 12, 2021
