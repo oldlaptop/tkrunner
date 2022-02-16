@@ -31,9 +31,13 @@ interp eval runner {
 	namespace path [concat [namespace path] ::tcl::mathop ::tcl::mathfunc ::trun]
 	namespace unknown ::trun::unknown
 
+	namespace eval Tkrunner {
+		variable hide_handle {}
+	}
+
 	trace add execution trun::unknown leave {apply { {cmd code result op} {
 		if {!$code} {
-			after 2000 hide
+			set Tkrunner::hide_handle [after 2000 hide]
 		}
 	}}}
 }
@@ -79,6 +83,11 @@ proc show {} {
 	if {[winfo exists .tkrunner]} {
 		wm withdraw .tkrunner
 		wm deiconify .tkrunner
+
+		# Cancel any pending hide action.
+		interp eval runner {
+			after cancel $Tkrunner::hide_handle
+		}
 	} else {
 		set ::cmd {}
 

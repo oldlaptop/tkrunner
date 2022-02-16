@@ -23,7 +23,8 @@ in the background:
 
 	tkrunner -quiet &
 
-and then bound to a keyboard shortcut in your window manager or desktop environment.
+and then bound to a keyboard shortcut in your window manager or desktop
+environment.
 When
 **tkrunner**
 is first invoked, it displays its window
@@ -133,6 +134,14 @@ interpreter as follows:
 *	The command
 	**hide**
 	is present in the root namespace, and causes the dialog box to hide itself.
+
+*	There exists a
+	**::Tkrunner**
+	namespace, which should be treated as reserved by the
+	**tkrunner**
+	implementation.
+	Its contents are deliberately undocumented and may change without notice for the
+	implementation's convenience.
 
 Commands entered at the dialog box are evaluated and their results added to the
 history display at the bottom of the dialog, preceded by a sequence number
@@ -361,4 +370,8 @@ It should still be considered changeable at the whim of the author.
 Up-to-date information on any issues may be found on the Github issue tracker:
 [https://github.com/oldlaptop/tkrunner/issues](https://github.com/oldlaptop/tkrunner/issues)
 
+<<<<<<< Updated upstream
 OpenBSD 6.9 - September 12, 2021
+=======
+OpenBSD 7.0 - February 16, 2022
+>>>>>>> Stashed changes
