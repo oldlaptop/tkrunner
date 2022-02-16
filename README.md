@@ -370,8 +370,4 @@ It should still be considered changeable at the whim of the author.
 Up-to-date information on any issues may be found on the Github issue tracker:
 [https://github.com/oldlaptop/tkrunner/issues](https://github.com/oldlaptop/tkrunner/issues)
 
-<<<<<<< Updated upstream
-OpenBSD 6.9 - September 12, 2021
-=======
 OpenBSD 7.0 - February 16, 2022
->>>>>>> Stashed changes
