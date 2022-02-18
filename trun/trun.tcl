@@ -120,7 +120,7 @@ namespace eval shortcuts {
 			# Display unformatted pages directly.
 			set outname $src
 		} else {
-			set outchan [file tempfile outname tkrunner-man-${name}_${section}.html]
+			set outchan [file tempfile outname trun-man-${name}_${section}.html]
 			try {
 				exec mandoc -T html $src >@ $outchan
 			} finally {
