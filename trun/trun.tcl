@@ -53,8 +53,12 @@ proc unknown {args} {
 
 		return [namespace eval [namespace current]::shortcuts $script]
 	# if we have the name/path of a non-executable file...
-	} elseif {[file exists $args] && ![file executable $args]} {
-		return [openurl file://[join $args]]
+	} elseif {
+		[file pathtype $args] eq {absolute} &&
+		[file exists $args] &&
+		![file executable $args]
+	} {
+		return [openurl [join $args]]
 	# otherwise treat it as an exec(n) pipeline
 	} else {
 		return [runcmd {*}$args]
