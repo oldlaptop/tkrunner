@@ -24,7 +24,8 @@ namespace eval trun {
 
 proc runcmd {args} {
 	# we don't want the channel, just the filename
-	close [file tempfile spewfile trun-[lindex $args 0].spew]
+	# note that the command could have an explicit path specification
+	close [file tempfile spewfile trun-[file tail [lindex $args 0]].spew]
 	exec -ignorestderr -- >>& $spewfile {*}$args &
 	return "launched exec(n) pipeline `$args &` (output in $spewfile)"
 }
@@ -51,6 +52,9 @@ proc unknown {args} {
 		set script [list [string range $spec 0 $pivot-1] [string range $spec $pivot+1 end]]
 
 		return [namespace eval [namespace current]::shortcuts $script]
+	# if we have the name/path of a non-executable file...
+	} elseif {[file exists $args] && ![file executable $args]} {
+		return [openurl file://[join $args]]
 	# otherwise treat it as an exec(n) pipeline
 	} else {
 		return [runcmd {*}$args]
