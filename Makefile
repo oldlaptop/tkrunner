@@ -19,6 +19,7 @@ install:
 	mkdir -p $(LIB)
 	mkdir -p $(BIN)
 	mkdir -p $(MAN)/man1
+	mkdir -p $(XDG_APPLICATIONS)
 	cp -pR trun $(LIB)
 	cp -p tkrunner $(BIN)
 	cp -p tkrunner.1 $(MAN)/man1
