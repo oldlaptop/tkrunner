@@ -111,6 +111,12 @@ interpreter as follows:
 	-	Command lines that appear to be valid URLs are passed to
 		**openurl**.
 
+	-	Command lines that are valid, absolute paths to files that are not executable
+		are passed to
+		xdg-open(1)
+		without a URL scheme, via
+		**openurl**.
+
 	-	Command lines that are valid shortcut specifications are transformed into a Tcl
 		list with the portion before the first colon as the first element, and the
 		portion after the first colon as the second element; the result is then
@@ -370,4 +376,4 @@ It should still be considered changeable at the whim of the author.
 Up-to-date information on any issues may be found on the Github issue tracker:
 [https://github.com/oldlaptop/tkrunner/issues](https://github.com/oldlaptop/tkrunner/issues)
 
-OpenBSD 7.0 - February 16, 2022
+OpenBSD 7.2 - November 22, 2022

@@ -117,6 +117,12 @@ facility is used to implement syntactic sugar as follows:
 Command lines that appear to be valid URLs are passed to
 .Sy openurl .
 .It
+Command lines that are valid, absolute paths to files that are not executable
+are passed to
+.Xr xdg-open 1
+without a URL scheme, via
+.Sy openurl .
+.It
 Command lines that are valid shortcut specifications are transformed into a Tcl
 list with the portion before the first colon as the first element, and the
 portion after the first colon as the second element; the result is then
