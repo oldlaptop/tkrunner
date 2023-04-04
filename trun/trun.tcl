@@ -165,6 +165,11 @@ namespace eval shortcuts {
 		Man.cgi "https://man.bsd.lv" $query
 	}
 
+	# man.voidlinux.org manpage search
+	proc vman {query} {
+		Man.cgi "https://man.voidlinux.org" $query
+	}
+
 	# openports.pl pkgname search
 	proc op {pkgname} {
 		openurl https://openports.pl/search?[http::formatQuery pkgname $pkgname]

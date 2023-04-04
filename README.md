@@ -264,6 +264,12 @@ The currently implemented shortcuts are:
 
 > Full-text Tcl wiki search for the shortcut query.
 
+**vman**
+
+> man.voidlinux.org search for the shortcut query, interpreted as for the
+> **man**
+> shortcut.
+
 **wp**
 
 > Wikipedia search for the shortcut query.
@@ -376,4 +382,4 @@ It should still be considered changeable at the whim of the author.
 Up-to-date information on any issues may be found on the Github issue tracker:
 [https://github.com/oldlaptop/tkrunner/issues](https://github.com/oldlaptop/tkrunner/issues)
 
-OpenBSD 7.2 - November 22, 2022
+OpenBSD 7.3 - April 4, 2023
