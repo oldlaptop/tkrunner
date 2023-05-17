@@ -1,4 +1,6 @@
 package require tcltest
+
+source [file join [file dirname [info script]] trun.tcl]
 package require trun
 
 ::tcltest::configure {*}$argv
