@@ -1,5 +1,6 @@
 .POSIX:
 
+TCLSH = /usr/bin/env tclsh
 PREFIX = /usr/local
 LIB = $(PREFIX)/lib/tcl
 BIN = $(PREFIX)/bin
@@ -7,7 +8,7 @@ MAN = $(PREFIX)/share/man
 XDG_APPLICATIONS = $(PREFIX)/share/applications
 
 default:
-	@echo "valid targets: install, README.md"
+	@echo "valid targets: install, test, README.md"
 	@echo "influential macros:"
 	@echo "PREFIX = $(PREFIX)"
 	@echo "LIB = $(LIB)"
@@ -25,6 +26,9 @@ install:
 	cp -p tkrunner.1 $(MAN)/man1
 	cp -p tkrunner.desktop $(XDG_APPLICATIONS)
 	@echo "you may wish to run update-desktop-database, kbuildsycoca, or similar"
+
+test:
+	$(TCLSH) trun/trun.tcl
 
 README.md: tkrunner.1
 	-mandoc -T markdown -W base $? > $@

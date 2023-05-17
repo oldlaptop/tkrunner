@@ -1,0 +1,121 @@
+package require tcltest
+package require trun
+
+::tcltest::configure {*}$argv
+
+namespace eval ::trun::test {
+namespace path {::tcltest ::trun}
+
+testConstraint have_mandoc [expr {[auto_execok mandoc] ne ""}]
+
+# Nasty hack: quietly turn [runcmd] into [return] so as to test that the
+# unknown handler works, and shortcuts produce sane URLs.
+proc murder_runcmd {} {
+	rename ::trun::runcmd ::trun::RuNcMd
+	proc ::trun::runcmd args { return $args }
+}
+proc resurrect_runcmd {} {
+	rename ::trun::runcmd {}
+	rename ::trun::RuNcMd ::trun::runcmd
+}
+
+test runcmd {
+	runcmd launches commands and captures their output
+} -constraints unixExecs -body {
+	set answer [runcmd echo {if your echo behaves weirdly, sorry, I guess}]
+	regexp {\(output in (.*trun-echo_.*\.spew)\)} $answer -> spewfile
+
+	set ret [list $answer [viewFile $spewfile]]
+	file delete $spewfile
+	return $ret
+} -match glob -result [list {*}{
+	{launched exec(n) pipeline `echo {if your echo behaves weirdly, sorry, I guess} &` (output in *trun-echo_*.spew)}
+	{if your echo behaves weirdly, sorry, I guess}
+}]
+
+test 1glob {
+	1glob correctly returns only the first glob match
+} -setup {
+	makeFile {} {this lousy filename has spaces}
+} -body {
+	file normalize [
+		1glob [file join [temporaryDirectory] this*spaces]
+	]
+} -cleanup {
+	removeFile {this lousy filename has spaces}
+} -result [file normalize [
+	file join [temporaryDirectory] {this lousy filename has spaces}
+]]
+
+test unknown-url {
+	urls go through xdg-open
+} -setup murder_runcmd -body {
+	::trun::unknown somescheme://example.com/fiddle/sticks
+} -cleanup {
+	resurrect_runcmd
+} -result {xdg-open somescheme://example.com/fiddle/sticks}
+
+test unknown-shortcut_error {
+	bogus shortcuts yield the appropriate error message
+} -body {
+	::trun::unknown bogus:search
+} -returnCodes error -result {no such shortcut bogus}
+
+# Most of the shortcuts aren't really worth testing, because the tricky
+# bit is in http::formatQuery. We have tricky bits of our own in the
+# manpage shortcuts, so we test the shorcut path through the unknown
+# handler and the manpage shortcuts at once.
+test unknown-dman {
+	dman: searches yield sane URLs
+} -setup murder_runcmd -body {
+	::trun::unknown dman:ascii(7)
+} -cleanup {
+	resurrect_runcmd
+} -result {xdg-open https://manpages.debian.org/ascii.7}
+
+# We also only really need to test one man.cgi shortcut.
+test unknown-om {
+	om: searches yield sane URLs
+} -setup murder_runcmd -body {
+	::trun::unknown om:style(9)
+} -cleanup resurrect_runcmd -result {xdg-open https://man.openbsd.org/style.9}
+
+test unknown-om-stray-dot {
+	sectionless om: searches do not yield stray dots
+} -setup murder_runcmd -body {
+	::trun::unknown om:pf.conf
+} -cleanup resurrect_runcmd -result {xdg-open https://man.openbsd.org/pf.conf}
+
+test unknown-man {
+	man: searches yield plausible mandoc -T html output
+} -constraints have_mandoc -setup murder_runcmd -body {
+	set response [::trun::unknown man:ls(1)]
+	regexp {xdg-open (.*trun-man-.*\.html)} $response -> tmpfile
+	set ret [viewFile $tmpfile]
+	file delete $tmpfile
+	return $ret
+} -cleanup {
+	resurrect_runcmd
+} -match glob -result {*<!-- This is an automatically generated file.*ls*}
+
+test unknown-file {
+	regular non-executable files go through xdg-open
+} -setup {
+	murder_runcmd
+	makeFile {} foo
+} -body {
+	::trun::unknown [file normalize [file join [temporaryDirectory] foo]]
+} -cleanup {
+	resurrect_runcmd
+	removeFile foo
+} -result [list xdg-open [file normalize [file join [temporaryDirectory] foo]]]
+
+test unknown-runcmd {
+	other queries just get fed to runcmd through {*}
+} -setup murder_runcmd -body {
+	::trun::unknown {echo {hello, world!}}
+} -cleanup resurrect_runcmd -result [list {echo {hello, world!}}]
+
+cleanupTests
+
+}; namespace delete ::trun::test

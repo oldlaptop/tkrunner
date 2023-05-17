@@ -223,3 +223,10 @@ namespace eval shortcuts {
 }
 
 } ;# namespace eval trun
+
+if {$::argv0 eq [info script]} {
+	package require tcltest
+	::tcltest::configure -testdir [file dirname [info script]]
+	::tcltest::configure {*}$argv
+	::tcltest::runAllTests
+}
