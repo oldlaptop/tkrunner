@@ -119,24 +119,28 @@ namespace eval shortcuts {
 		regexp $manexp $query -> name -> section
 		# a stray empty argument will confuse man(1)
 		if {$section eq ""} {
-			set src [lindex [exec man -w $name] 0]
+			set sources [exec man -w $name]
 		} else {
-			set src [exec man -w $section $name]
+			set sources [exec man -w $section $name]
 		}
 
-		if {[string match */cat*/*.0 $src]} {
-			# Display unformatted pages directly.
-			set outname $src
-		} else {
-			set outchan [file tempfile outname trun-man-${name}_${section}.html]
-			try {
-				exec mandoc -T html $src >@ $outchan
-			} finally {
-				close $outchan
+		set messages [list]
+		foreach src $sources {
+			if {[string match */cat*/*.0 $src]} {
+				# Display unformatted pages directly.
+				set outname $src
+			} else {
+				set outchan [file tempfile outname trun-man-${name}_${section}.html]
+				try {
+					exec mandoc -T html $src >@ $outchan
+				} finally {
+					close $outchan
+				}
 			}
+			lappend messages [openurl $outname]
 		}
 
-		openurl $outname
+		return [join $messages \n]
 	}
 
 	# Helper for man.cgi manpage searches.

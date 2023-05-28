@@ -100,6 +100,31 @@ test unknown-man {
 	resurrect_runcmd
 } -match glob -result {*<!-- This is an automatically generated file.*ls*}
 
+testConstraint have_printf.1 [expr {![catch {exec man -w 1 printf}]}]
+testConstraint have_printf.3 [expr {![catch {exec man -w 3 printf}]}]
+test unknown-man-multiple {
+	man: searches that yield multiple matches generate HTML for each
+} -constraints {
+	have_mandoc
+	have_printf.1
+	have_printf.3
+} -setup murder_runcmd -body {
+	set responses [::trun::unknown man:printf]
+	set ret [list]
+	foreach response [split $responses \n] {
+		regexp {xdg-open (.*trun-man-.*\.html)} $response -> tmpfile
+		lappend ret [string match \
+			{*<!-- This is an automatically generated file.*printf*} \
+			[viewFile $tmpfile] \
+		]
+		file delete $tmpfile
+	}
+
+	return $ret
+} -cleanup {
+	resurrect_runcmd
+} -result {1 1}
+
 test unknown-file {
 	regular non-executable files go through xdg-open
 } -setup {

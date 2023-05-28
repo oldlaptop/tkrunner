@@ -217,8 +217,8 @@ The currently implemented shortcuts are:
 > man(1);
 > if the section is omitted, the section argument to
 > man(1)
-> will be omitted, and the first matching page will be selected.
-> The manual page will be formatted as HTML using
+> will be omitted.
+> All matching manual pages will be formatted as HTML using
 > mandoc(1)
 > and opened with
 > xdg-open(1).
@@ -382,4 +382,4 @@ It should still be considered changeable at the whim of the author.
 Up-to-date information on any issues may be found on the Github issue tracker:
 [https://github.com/oldlaptop/tkrunner/issues](https://github.com/oldlaptop/tkrunner/issues)
 
-OpenBSD 7.3 - April 4, 2023
+OpenBSD 7.3 - May 27, 2023
