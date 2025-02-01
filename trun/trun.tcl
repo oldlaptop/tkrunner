@@ -65,6 +65,32 @@ proc unknown {args} {
 	}
 }
 
+proc Decompress {file} {
+	set decompressor {}
+
+	# These decompressor names are chosen with an eye to "mainstream"
+	# linuxes, on the theory that systems for which one or more of these
+	# choices are wrong (such as OpenBSD) are likely to be systems that do
+	# not do things like bzip2 all the manual pages (as OpenBSD is).
+	switch -glob -- $file {
+		*.gz { set decompressor zcat }
+		*.bz2 { set decompressor bzcat }
+		*.xz { set decompressor xzcat }
+		default { }
+	}
+	if {$decompressor eq {}} {
+		return $file
+	} else {
+		set fd [file tempfile output trun-decompressed]
+		try {
+			exec $decompressor $file >@ $fd
+			return $output
+		} finally {
+			close $fd
+		}
+	}
+}
+
 namespace eval shortcuts {
 	namespace path [concat [namespace path] [namespace parent]]
 
@@ -132,7 +158,7 @@ namespace eval shortcuts {
 			} else {
 				set outchan [file tempfile outname trun-man-${name}_${section}.html]
 				try {
-					exec mandoc -T html $src >@ $outchan
+					exec mandoc -T html [Decompress $src] >@ $outchan
 				} finally {
 					close $outchan
 				}
