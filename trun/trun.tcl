@@ -56,7 +56,7 @@ proc unknown {args} {
 	} elseif {
 		[file pathtype $args] eq {absolute} &&
 		[file exists $args] &&
-		![file executable $args]
+		!([file isfile $args] && [file executable $args])
 	} {
 		return [openurl [join $args]]
 	# otherwise treat it as an exec(n) pipeline
